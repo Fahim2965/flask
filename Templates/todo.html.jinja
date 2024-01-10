@@ -2,19 +2,38 @@
 <html lang="en">
 <head>
     <title>Todo List</title>
+    <style>
+        .complete {
+            text-decoration: line-through;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
+<div class = "list">
     <h1>Todos</h1>
     <ul>
-        {% for todo in my_todos%}
-            <li>
+        {% for todo in my_todos %}
+            <li class = "{% if todo['complete']%} complete {% endif %}">
+            {% if todo['complete'] %}✅{% endif %}
+            {% if todo['complete'] == 0%} {% endif %}
+
+
             {{todo['description']}}
             <form method = "POST" action = "/delete_todo/{{todo['id'] }}">
-                <input type = "submit" value = "Delete">
+                <input class = "btn" class = "todo-input" type = "submit" value = "Delete">
             </form>
+            {% if todo['complete'] == 0 %}
+            <form method = "POST" action = "/complete_todo/{{todo['id'] }}">
+                <input class = "btn" class = "todo-input" type = "submit" value = "Mark Complete">
+            </form>
+            {% endif %}
+            
             </li>
         {% endfor %}
+
     </ul>
+</div>
 
     <form method = "post">
 
@@ -24,14 +43,42 @@
     </form>
 
     <style>
-        body {
-            background-color: bisque;
-            font-family: "Baloo 2", sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            }
+body {
+    background-color: rgb(171, 167, 163);
+    font-family: "Baloo 2", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+.btn {
+  background: lightseagreen;
+  color: #fff;
+  padding: 3px 10px;
+  margin: 0 0 0 3px;
+  border: none;
+  border-radius: 5px;
+  font-size: 12px;
+  line-height: 24px;
+  cursor: pointer;
+  vertical-align: bottom;
+
+}
+
+.btn:hover {
+  background: lightslategrey;
+}
+
+.list {
+    background-color:azure;
+    border-radius: 20px;
+    width: 500px;
+}
     </style>
 </body>
 </html>
