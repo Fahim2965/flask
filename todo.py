@@ -2,9 +2,19 @@ from flask import Flask, render_template, request, redirect
 import pymysql
 import pymysql.cursors
 from pprint import pprint as print
+from flask_httpauth import HTTPBasicAuth
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
+auth = HTTPBasicAuth()
+
+users = {
+    "john": "hello",
+    "susan": "bye"
+}
+
+
 
 todos = ["do work", "do more work", "and then do some more work"]
 
@@ -17,6 +27,7 @@ conn = pymysql.connect(
 )
 
 @app.route('/', methods =['GET', 'POST'])
+@auth.login_required
 def index():
     if request.method == 'POST':
         new_todo = request.form["new_todo"]
@@ -49,3 +60,12 @@ def todo_complete(todo_index):
     cursor.close()
     conn.commit()
     return redirect('/')
+
+@auth.get_password
+def get_pw(username):
+    if username in users:
+        return users.get(username)
+    return None
+
+
+
